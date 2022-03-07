@@ -43,9 +43,8 @@ namespace InvertedIndexSearch
             return wordsFromFile;
         }
 
-        public static void Main(string[] args)
+        public static void FormDictionary(string filePath)
         {
-            var start = DateTime.Now;
             const string bathPath = @"files";
             filepaths = Directory.GetFiles(bathPath, "*", SearchOption.AllDirectories).Select(Path.GetFileName).ToList();
 
@@ -73,8 +72,22 @@ namespace InvertedIndexSearch
                 
                 stringBuilder.Clear();
             }
+        }
+
+        public static void Main(string[] args)
+        {
+            /*var start = DateTime.Now;
+            FormDictionary(@"files");
             var stop = DateTime.Now;
-            Console.WriteLine(stop - start);
+            Console.WriteLine(stop - start);*/
+            Console.WriteLine("Enter request:");
+            var request = Console.ReadLine();
+            var requestWords = ParseRawStr(request);
+            foreach (var word in requestWords)
+            {
+                Console.WriteLine(word);
+            }
+
         }
     }
 }
