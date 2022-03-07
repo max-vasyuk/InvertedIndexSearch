@@ -5,8 +5,8 @@ namespace InvertedIndexSearch
 {
     public static class Program
     {
-        public static List<string> filepaths = new ();
-        public static Dictionary<string, List<(string, int)>> dictionary = new ();
+        public static List<string> filepaths = new();
+        public static Dictionary<string, List<(string, int)>> dictionary = new();
 
         public static List<(string, int)> GetCountOccurrencesFromList(List<string> words)
         {
@@ -74,19 +74,62 @@ namespace InvertedIndexSearch
             }
         }
 
+        public static void PrintList(List<string> list)
+        {
+            foreach (var l in list)
+            {
+                Console.WriteLine(l);
+            }
+        }
+
+        public static List<(string, int)> Prioritize(List<string> words)
+        {
+            var priorList = new List<(string, int)>();
+            foreach (var word in words)
+            {
+                switch (word)
+                {
+                    case "не":
+                        priorList.Add((word, 2));
+                        break;
+                    case "и":
+                        priorList.Add((word, 1));
+                        break;
+                    case "или":
+                        priorList.Add((word, 0));
+                        break;
+                    default:
+                        priorList.Add((word, -1));
+                        break;
+                }
+            }
+            return priorList;
+        }
+
+        public static Node buildTree(List<string> words)
+        {
+            if (words.Count == 3)
+            {
+                return new Node(words[1], new Node(words[0]), new Node(words[2]));
+            }
+            return new Node("dummy");
+        }
+
         public static void Main(string[] args)
         {
-            /*var start = DateTime.Now;
-            FormDictionary(@"files");
-            var stop = DateTime.Now;
-            Console.WriteLine(stop - start);*/
+            // request processing
             Console.WriteLine("Enter request:");
             var request = Console.ReadLine();
             var requestWords = ParseRawStr(request);
-            foreach (var word in requestWords)
+            PrintList(requestWords);
+
+            var priorWords = Prioritize(requestWords);
+            foreach (var (word, prior) in priorWords)
             {
-                Console.WriteLine(word);
+                Console.WriteLine("{0}: {1}", word, prior);
             }
+            //buildTree(requestWords).ViewNode();
+
 
         }
     }
