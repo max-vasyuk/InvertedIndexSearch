@@ -7,6 +7,7 @@ namespace InvertedIndexSearch
     {
         public static List<string> filepaths = new();
         public static Dictionary<string, List<(string, int)>> dictionary = new();
+        public static int minPrior = int.MaxValue;
 
         public static List<(string, int)> GetCountOccurrencesFromList(List<string> words)
         {
@@ -91,12 +92,24 @@ namespace InvertedIndexSearch
                 {
                     case "не":
                         priorList.Add((word, 2));
+                        if (minPrior > 2)
+                        {
+                            minPrior = 2;
+                        }
                         break;
                     case "и":
                         priorList.Add((word, 1));
+                        if (minPrior > 1)
+                        {
+                            minPrior = 1;
+                        }
                         break;
                     case "или":
                         priorList.Add((word, 0));
+                        if (minPrior > 0)
+                        {
+                            minPrior = 0;
+                        }
                         break;
                     default:
                         priorList.Add((word, -1));
@@ -128,6 +141,7 @@ namespace InvertedIndexSearch
             {
                 Console.WriteLine("{0}: {1}", word, prior);
             }
+            Console.WriteLine("minPrior: {0}", minPrior);
             //buildTree(requestWords).ViewNode();
 
 
