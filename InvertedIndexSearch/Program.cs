@@ -8,6 +8,7 @@ namespace InvertedIndexSearch
         public static List<string> filepaths = new();
         public static Dictionary<string, List<(string, int)>> dictionary = new();
         public static int minPrior = int.MaxValue;
+        public static int indexMinPrior = -1;
 
         public static List<(string, int)> GetCountOccurrencesFromList(List<string> words)
         {
@@ -86,6 +87,7 @@ namespace InvertedIndexSearch
         public static List<(string, int)> Prioritize(List<string> words)
         {
             var priorList = new List<(string, int)>();
+            int i = 0;
             foreach (var word in words)
             {
                 switch (word)
@@ -95,6 +97,7 @@ namespace InvertedIndexSearch
                         if (minPrior > 2)
                         {
                             minPrior = 2;
+                            indexMinPrior = i;
                         }
                         break;
                     case "и":
@@ -102,6 +105,7 @@ namespace InvertedIndexSearch
                         if (minPrior > 1)
                         {
                             minPrior = 1;
+                            indexMinPrior = i;
                         }
                         break;
                     case "или":
@@ -109,12 +113,14 @@ namespace InvertedIndexSearch
                         if (minPrior > 0)
                         {
                             minPrior = 0;
+                            indexMinPrior = i;
                         }
                         break;
                     default:
                         priorList.Add((word, -1));
                         break;
                 }
+                i++;
             }
             return priorList;
         }
@@ -141,7 +147,7 @@ namespace InvertedIndexSearch
             {
                 Console.WriteLine("{0}: {1}", word, prior);
             }
-            Console.WriteLine("minPrior: {0}", minPrior);
+            Console.WriteLine("minPrior: {0}, idx: {1}", minPrior, indexMinPrior);
             //buildTree(requestWords).ViewNode();
 
 
