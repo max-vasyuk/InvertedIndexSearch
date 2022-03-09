@@ -32,6 +32,11 @@ public class Node
         parent = null;
     }
 
+    public int ChildCount()
+    {
+        return ((leftNode is null) ? 0 : 1) + ((rightNode is null) ? 0 : 1);
+    }
+
     public void ViewNode()
     {
         Console.WriteLine(data);
