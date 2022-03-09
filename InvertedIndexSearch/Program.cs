@@ -124,14 +124,54 @@ namespace InvertedIndexSearch
             }
             return priorList;
         }
-
-        public static Node buildTree(List<string> words)
+        
+        public static void PrintList2(List<(string, int)> list)
         {
-            if (words.Count == 3)
+            foreach (var l in list)
             {
-                return new Node(words[1], new Node(words[0]), new Node(words[2]));
+                Console.WriteLine("{0} {1}", l.Item1, l.Item2);
             }
-            return new Node("dummy");
+        }
+
+        public static (int, int) findPriorOp(List<(string, int)> words)
+        {
+            if (words.Count == 1)
+            {
+                return (-1, 0);
+            }
+            int minIdx = -1;
+            int minOp = int.MaxValue;
+            int i = 0;
+            foreach (var (_, prior) in words)
+            {
+                if (prior < minOp && prior != -1)
+                {
+                    minOp = prior;
+                    minIdx = i;
+                }
+                i++;
+            }
+            
+            return (minIdx != -1)?(minOp, minIdx):(-1,  0);
+        }
+        
+        public static (List<(string, int)>, List<(string, int)>) Split(this List<(string, int)> source, int idx)
+        {
+            var l1 = source.Where(x => source.FindIndex(x2=> x.Item1 == x2.Item1) < idx).ToList();
+            var l2 = source.Where(x => source.FindIndex(x2=> x.Item1 == x2.Item1) > idx).ToList();
+
+            return (l1, l2);
+        }
+
+        public static Node BuildTree(List<(string, int)> priorWords)
+        {
+            if (priorWords.Count == 1)
+            {
+                return new Node(priorWords[0].Item1);
+            }
+            var (minOp, minIdx) = findPriorOp(priorWords);
+            var (leftSubNode, rightSubNode) = Split(priorWords, minIdx);
+            return new Node(priorWords[minIdx].Item1, BuildTree(leftSubNode), BuildTree(rightSubNode));
         }
 
         public static void Main(string[] args)
@@ -140,17 +180,10 @@ namespace InvertedIndexSearch
             Console.WriteLine("Enter request:");
             var request = Console.ReadLine();
             var requestWords = ParseRawStr(request);
-            PrintList(requestWords);
-
             var priorWords = Prioritize(requestWords);
-            foreach (var (word, prior) in priorWords)
-            {
-                Console.WriteLine("{0}: {1}", word, prior);
-            }
-            Console.WriteLine("minPrior: {0}, idx: {1}", minPrior, indexMinPrior);
-            //buildTree(requestWords).ViewNode();
-
-
+            var tree = BuildTree(priorWords);
+            tree.ViewNode();
+            tree.leftNode.ViewNode();
         }
     }
 }
