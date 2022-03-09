@@ -18,11 +18,18 @@ public class Node
     public Node(string data, Node leftNode, Node rightNode)
     {
         this.data = data;
-        this.leftNode = leftNode;
-        this.rightNode = rightNode;
+        if (!(leftNode is null))
+        {
+            this.leftNode = leftNode;
+            leftNode.parent = this;
+        }
+        
+        if (!(rightNode is null))
+        {
+            this.rightNode = rightNode;
+            rightNode.parent = this;
+        }
         parent = null;
-        leftNode.parent = this;
-        rightNode.parent = this;
     }
 
     public void ViewNode()
