@@ -165,6 +165,10 @@ namespace InvertedIndexSearch
 
         public static Node BuildTree(List<(string, int)> priorWords)
         {
+            if (priorWords.Count == 0)
+            {
+                return null;
+            }
             if (priorWords.Count == 1)
             {
                 return new Node(priorWords[0].Item1);
@@ -176,6 +180,10 @@ namespace InvertedIndexSearch
 
         public static void Main(string[] args)
         {
+            //TODO: обход дерева Left-Right-Root
+            //TODO: выдача результатов из инвертированного словаря
+            //TODO: упорядочивание по частоте
+            //TODO: учитывать отсутствие логических операций в запросе
             // request processing
             Console.WriteLine("Enter request:");
             var request = Console.ReadLine();
@@ -183,7 +191,15 @@ namespace InvertedIndexSearch
             var priorWords = Prioritize(requestWords);
             var tree = BuildTree(priorWords);
             tree.ViewNode();
-            tree.leftNode.ViewNode();
+            if (!(tree.leftNode is null))
+            {
+                tree.leftNode.ViewNode();
+            }
+
+            if (!(tree.rightNode is null))
+            {
+                tree.rightNode.rightNode.ViewNode();
+            }
         }
     }
 }
