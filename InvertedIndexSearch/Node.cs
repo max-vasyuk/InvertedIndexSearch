@@ -36,14 +36,5 @@ public class Node
     {
         return ((leftNode is null) ? 0 : 1) + ((rightNode is null) ? 0 : 1);
     }
-
-    public void ViewNode()
-    {
-        Console.WriteLine(data);
-        var tempParent = (parent is null) ? "null" : parent.data;
-        var tempLeftNode = (leftNode is null) ? "null" : leftNode.data;
-        var tempRightNode = (rightNode is null) ? "null" : rightNode.data;
-        Console.WriteLine("P:{0}\tL:{1}\tR:{2}\n", tempParent, tempLeftNode, tempRightNode);
-    }
-
+    
 }

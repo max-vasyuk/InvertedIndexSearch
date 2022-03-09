@@ -178,6 +178,17 @@ namespace InvertedIndexSearch
             return new Node(priorWords[minIdx].Item1, BuildTree(leftSubNode), BuildTree(rightSubNode));
         }
 
+        public static void ViewTree(Node tree, int level)
+        {
+            if (!(tree is null))
+            {
+                ViewTree(tree.rightNode , level + 1); // Вывод правого поддерева
+                for ( int i = 0; i < level; i++) Console.Write("\t");
+                Console.WriteLine(" {0}", tree.data);
+                ViewTree(tree.leftNode , level + 1); // Вывод левого поддерева
+            }
+        }
+
         public static void Main(string[] args)
         {
             //TODO: обход дерева Left-Right-Root
@@ -190,7 +201,8 @@ namespace InvertedIndexSearch
             var requestWords = ParseRawStr(request);
             var priorWords = Prioritize(requestWords);
             var tree = BuildTree(priorWords);
-            tree.ViewNode();
+            ViewTree(tree, 0);
+            /*tree.ViewNode();
             if (!(tree.leftNode is null))
             {
                 tree.leftNode.ViewNode();
@@ -199,7 +211,7 @@ namespace InvertedIndexSearch
             if (!(tree.rightNode is null))
             {
                 tree.rightNode.rightNode.ViewNode();
-            }
+            }*/
         }
     }
 }
